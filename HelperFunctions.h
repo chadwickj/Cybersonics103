@@ -4,12 +4,13 @@
 #include "Constants.h"
 #include <cmath>
 
-double encoderCountToInches(int encoderCount) {
+static double encoderCountToInches(int encoderCount) {
 	return encoderCount * INCHES_PER_COUNT;
 }
 
-double inchesToEncoderCounts(double inches) {
+/*
+static double inchesToEncoderCounts(double inches) {
 	return inches / INCHES_PER_COUNT;
-}
+}*/
 
 #endif
