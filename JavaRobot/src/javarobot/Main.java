@@ -7,7 +7,8 @@ http://www.usfirst.org/uploadedFiles/Robotics_Programs/FRC/Game_and_Season__Info
 package javarobot;
 
 public class Main {
+    private static float dir;
     public static void main(String[] args) {
-
+        System.out.println(dir);
     }
 }
