@@ -24,7 +24,7 @@ private:
 	
 	AnalogChannel* m_ultrasonic;
 	
-	DigitalOutput* m_led;
+	Relay* m_led;
 	
 	PIDController* m_gyroController;
 	

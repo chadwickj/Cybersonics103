@@ -40,7 +40,7 @@ DriveBase::DriveBase() {
 	// Ultrasonic
 	m_ultrasonic = new AnalogChannel(ULTRASONIC_CHANNEL);
 	
-	m_led = new DigitalOutput(LED_DIGITAL_OUTPUT);
+	m_led = new Relay(LED_RELAY_CHAN, Relay::kForwardOnly);
 	
 	m_gyroController = new PIDController(0.0, 0.0, 0.0, m_gyro, m_leftDrive);
 	m_gyroController->SetPID(GYRO_P, GYRO_I, GYRO_D);
@@ -56,10 +56,10 @@ void DriveBase::EnableTeleopControls() {
 	m_leftDrive->Set(-1*m_controls->GetLeftY());
 	m_rightDrive->Set(-1*m_controls->GetRightY());
 	
-	if (GetUltrasonicDistance() > 500 && GetUltrasonicDistance() < 560) {
-		m_led->Set(1);
+	if (GetUltrasonicDistance() > 490 && GetUltrasonicDistance() < 550) {
+		m_led->Set(Relay::kOn);;
 	} else {
-		m_led->Set(0);
+		m_led->Set(Relay::kOff);;
 	}
 }
 

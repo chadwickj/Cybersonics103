@@ -7,7 +7,7 @@ static const int COMPRESSOR_RELAY_CHAN = 1;
 static const int PRESSURE_SWITCH_CHAN = 14;
 
 //LIGHT
-static const int LED_DIGITAL_OUTPUT = 2;
+static const int LED_RELAY_CHAN = 2;
 
 // MOTORS
 
