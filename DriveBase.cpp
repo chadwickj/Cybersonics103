@@ -15,7 +15,7 @@ DriveBase* DriveBase::GetInstance() {
 
 DriveBase::DriveBase() {
 	m_controls = Controls::GetInstance();
-	
+
 	// Remember to change these to Talons
 	m_leftDrive = new Talon(LEFT_DRIVE_PWM);
 	m_rightDrive = new Talon(RIGHT_DRIVE_PWM);
@@ -23,31 +23,31 @@ DriveBase::DriveBase() {
 	// Encoders
 	m_leftEncoder = new Encoder(LEFT_ENCODER_A, LEFT_ENCODER_B);
 	m_rightEncoder = new Encoder(RIGHT_ENCODER_A, RIGHT_ENCODER_B, true);
-	
+
 	m_leftEncoder->SetDistancePerPulse(INCHES_PER_COUNT);
 	m_rightEncoder->SetDistancePerPulse(INCHES_PER_COUNT);
-	
+
 	m_leftEncoderController = new PIDController(0.0, 0.0, 0.0, m_leftEncoder, m_leftDrive);
 	m_rightEncoderController = new PIDController(0.0, 0.0, 0.0, m_rightEncoder, m_rightDrive);
-	
+
 	m_leftEncoderController->SetPID(LEFT_ENCODER_P, LEFT_ENCODER_I, LEFT_ENCODER_D);
-	m_rightEncoderController->SetPID(RIGHT_ENCODER_P, RIGHT_ENCODER_I, RIGHT_ENCODER_D);	
-	
+	m_rightEncoderController->SetPID(RIGHT_ENCODER_P, RIGHT_ENCODER_I, RIGHT_ENCODER_D);
+
 	// Gyro
 	m_gyro = new Gyro(GYRO_CHANNEL);
 	m_gyro->SetSensitivity(GYRO_SENSITIVITY);
 
 	// Ultrasonic
 	m_ultrasonic = new AnalogChannel(ULTRASONIC_CHANNEL);
-	
+
 	m_led = new Relay(LED_RELAY_CHAN, Relay::kForwardOnly);
-	
+
 	m_gyroController = new PIDController(0.0, 0.0, 0.0, m_gyro, m_leftDrive);
 	m_gyroController->SetPID(GYRO_P, GYRO_I, GYRO_D);
-	
+
 	m_isTurning = false;
 	m_isDrivingStraight = false;
-	
+
 	m_timer = new Timer();
 	m_timerStopped = false;
 }
@@ -55,7 +55,7 @@ DriveBase::DriveBase() {
 void DriveBase::EnableTeleopControls() {
 	m_leftDrive->Set(-1*m_controls->GetLeftY());
 	m_rightDrive->Set(-1*m_controls->GetRightY());
-	
+
 	if (GetUltrasonicDistance() > 490 && GetUltrasonicDistance() < 550) {
 		m_led->Set(Relay::kOn);;
 	} else {
@@ -118,6 +118,22 @@ bool DriveBase::EncoderPidIsEnabled() {
 	return m_leftEncoderController->IsEnabled() && m_rightEncoderController->IsEnabled();
 }
 
+void turnBrakesOn() {
+
+}
+
+void turnBrakesOff() {
+
+}
+
+void shiftUp() {
+
+}
+
+void shiftDown() {
+
+}
+
 void DriveBase::ResetGyro() {
 	m_gyro->Reset();
 }
@@ -133,7 +149,7 @@ float DriveBase::GetUltrasonicDistance() {
 /**
  * @param {float} setpoint - The target angle for the gyro in degrees.
  * @param {float} tolerance - An absolute tolerance in degrees.
- * 
+ *
  * @return True if turn has completed, false otherwise.
  */
 /*
@@ -144,7 +160,7 @@ bool DriveBase::Turn(float setpoint, float tolerance, float maxSpeed) {
 		m_gyroController->Enable();
 		m_isTurning = true;
 	}
-	
+
 	if (m_isTurning) {
 		m_rightDrive->Set(-1*m_gyroController->Get());
 
@@ -156,7 +172,7 @@ bool DriveBase::Turn(float setpoint, float tolerance, float maxSpeed) {
 			}
 			m_timer->Start();
 			m_timerStopped = false;
-			
+
 			// On Target
 			if (m_timer->Get() > 0.5) {	//TODO: KILL MAGIC NUMBER
 				m_gyroController->Disable();
@@ -169,7 +185,7 @@ bool DriveBase::Turn(float setpoint, float tolerance, float maxSpeed) {
 			m_timerStopped = true;
 		}
 	}
-	
+
 	return false;
 } */
 
@@ -184,10 +200,10 @@ bool DriveBase::Turn(float setpoint, float tolerance, float maxSpeed) {
 		} else if (setpoint < 0) {
 			m_leftDrive->Set(-1.0 * maxSpeed);
 			m_rightDrive->Set(maxSpeed);
-		} 
+		}
 		m_isTurning = true;
 	}
-	
+
 	if (m_isTurning) {
 		if ((setpoint > 0 && m_gyro->GetAngle() > setpoint) || (setpoint < 0 && m_gyro->GetAngle() < setpoint)) {
 			SetSpeed(0.0);
@@ -245,33 +261,33 @@ bool DriveBase::DriveStraight(float setpoint, float tolerance, float p, float ma
 		SetEncoderSetpoint(setpoint);
 		EnableEncoderPid();
 		m_rightDrive->Set(m_leftEncoderController->Get());
-		
+
 		// TODO: Get rid of reset Gyro?
 		m_gyro->Reset();
 		m_isDrivingStraight = true;
 	}
-	
+
 	if (m_isDrivingStraight) {
 		float angleError = m_gyro->GetAngle();
-		
+
 		float leftSpeed = m_leftDrive->Get() + (angleError * p);
 		float rightSpeed = m_rightDrive->Get() - (angleError * p);
-				
+
 		if (leftSpeed > 1.0) {
 			leftSpeed = 1.0;
 		} else if (leftSpeed < -1.0) {
 			leftSpeed = -1.0;
 		}
-		
+
 		if (rightSpeed > 1.0) {
 			rightSpeed = 1.0;
 		} else if (rightSpeed < -1.0) {
 			rightSpeed = -1.0;
 		}
-		
+
 		m_leftDrive->Set(leftSpeed);
 		m_rightDrive->Set(rightSpeed);
-		
+
 		if (setpoint > 0) {
 			if ((encoderCountToInches(m_leftEncoder->Get()) >= setpoint) || (encoderCountToInches(m_rightEncoder->Get()) >= setpoint)) {
 				DisableEncoderPid();
@@ -295,14 +311,14 @@ bool DriveBase::DriveForward(float setpoint, float tolerance) {
 		EnableEncoderPid();
 		m_isDrivingStraight = true;
 	}
-	
+
 	if (m_isDrivingStraight) {
-		
+
 		// Determine when to disable PID
 		bool leftOnTarget = fabs(setpoint - encoderCountToInches(m_leftEncoder->Get())) < tolerance;
 		bool rightOnTarget = fabs(setpoint - encoderCountToInches(m_rightEncoder->Get())) < tolerance;
-		
-		
+
+
 		if (leftOnTarget && rightOnTarget) {
 			DisableEncoderPid();
 			m_isDrivingStraight = false;

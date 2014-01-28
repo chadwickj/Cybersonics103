@@ -2,25 +2,41 @@
 #define PICKUP_H
 
 #include "WPILib.h"
-#include "Controls.h"
-#include "Shooter.h"
 
 class Pickup {
-
 private:
 	static Pickup* m_instance;
-	Talon* m_pickup;
-	Controls* m_controls;
-	
-	Shooter* shooter;
-	
+    Talon* m_pickupMotor;
+    Talon* m_pickupArm;
+
+    Controls* m_controls;
+
+    //Solenoid* m_armSolenoid;
+
+    //Encoder* m_pickupEncoder;
+    //PIDController m_pickupEncoderController;
+
 public:
 	static Pickup* GetInstance();
 	Pickup();
-	
-	void EnableTeleopControls();
-	void TurnOn(float speed = 0.5);
-	void TurnOff();
-};
 
-#endif
+    void EnableTeleopControls();
+
+    void MoveArm(float speed);
+    void TurnOn();
+    void TurnOff();
+
+
+    //void SetPickupEncoderSetpoint(float setpoint);
+    //int GetEncoderCount();
+    //void ResetEncoder();
+    //void EnableEncoderPid();
+	//void DisableEncoderPid();
+	//bool EncoderPidIsEnabled();
+
+
+
+}
+
+
+#endif // PICKUP_H_INCLUDED

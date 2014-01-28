@@ -1,6 +1,9 @@
 #include "WPILib.h"
-#include "Pickup.h"
 #include "Constants.h"
+#include "Pickup.h"
+#include "Controls.h"
+//#include "math.h"
+
 
 Pickup* Pickup::m_instance = NULL;
 
@@ -11,28 +14,68 @@ Pickup* Pickup::GetInstance() {
   return m_instance;
 }
 
-Pickup::Pickup() {
-	m_pickup = new Talon(PICKUP_PWM);
-	m_controls = Controls::GetInstance();
-	shooter = Shooter::GetInstance();
+Pickup::Pickup ()
+{
+    m_controls = Controls::GetInstance();
+
+    pickup = new Talon(PICKUP_MOTOR);
+    pickupArm = new Talon(PICKUP_AMR_MOTOR);
+
+    //m_armSolenoid = new Solenoid(PICKUP_ARM_SOLENOID);
+
+    //int pickupArmUpperLimit = ;
+    //int pickupArmLowerLimit = ;
+}
+Pickup::EnableTeleopControls()
+{
+    int pickupSpeed = m_controls->GetPickupY();
+
+    if (pickupSpeed < -.1 && pickupSpeed > .1) {
+        pickup->MoveArm(pickupSpeed);
+    } else {
+        pickup->MoveArm(0);
+    }
+    if (m_controls->GetPickupButton(x)) {
+        pickup->TurnOn();
+    } else if (m_controls->GetPickupButton(x)) {
+        pickup->TurnOff();
+    } else {
+        pickup->TurnOff();
+    }
 }
 
-void Pickup::EnableTeleopControls() {
-	if (m_controls->GetShooterButton(6)) { // Spit out
-		m_pickup->Set(0.50);
-	} else if (m_controls->GetShooterButton(7)) {	// Pick up
-		if (!(shooter->IsBucketUp()) && !(shooter->IsTiltUp())) {
-			m_pickup->Set(-0.50);
-		}
-	} else {
-		m_pickup->Set(0.0);
-	}
+void Pickup::TurnOn()
+{
+    pickupMotor->Set(1.0);
 }
 
-void Pickup::TurnOn(float speed) {
-	m_pickup->Set(-1.0 * speed);
+void Pickup::TurnOff()
+{
+    pickupMotor->Set(0.0);
 }
 
-void Pickup::TurnOff() {
-	m_pickup->Set(0.0);
+void Pickup::MoveArm(float speed)
+{
+    pickupArm->Set(1 * speed);
 }
+/*
+Pickup::EnableEncoderPid()
+{
+
+}
+
+Pickup::DisableEncoderPid()
+{
+
+}
+
+Pickup::EncoderPidIsEnabled()
+{
+
+}
+
+Pickup::GetEncoderCount()
+{
+
+}
+*/

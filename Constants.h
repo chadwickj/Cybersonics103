@@ -6,6 +6,11 @@
 static const int COMPRESSOR_RELAY_CHAN = 1;
 static const int PRESSURE_SWITCH_CHAN = 14;
 
+// SOLENOIDS
+
+static const int LAUNCHER_FIRE_SOLENOID = ;
+static const int LAUNCHER_RESET_SOLENOID = ;
+
 //LIGHT
 static const int LED_RELAY_CHAN = 2;
 
@@ -14,27 +19,17 @@ static const int LED_RELAY_CHAN = 2;
 static const int LEFT_DRIVE_PWM = 1;
 static const int RIGHT_DRIVE_PWM = 2;
 
-static const int PICKUP_PWM = 4;
+// PICKUP
 
-static const int SHOOTER_BAG_PWM = 5;
-static const int SHOOTER_775_PWM = 8;
+static const int PICKUP_MOTOR = ;
+static const int PICKUP_ARM_MOTOR = ;
 
-//CLIMBER MOTORS
-
-static const int CLIMB_WINDOW = 7;
-static const int CLIMB_CIM = 10;
 
 // CONTROLS
 
 static const int LEFT_JOYSTICK_PORT = 1;
 static const int RIGHT_JOYSTICK_PORT = 2;
-static const int SHOOTER_JOYSTICK_PORT = 3;
-static const int CLIMBER_JOYSTICK_PORT = 4;
-
-//STRING POT
-
-static const int TILT_POT_CHAN = 3;
-static const int MAST_POT_CHAN = 4;
+static const int OPERATOR_JOYSTICK_PORT = ;
 
 // SENSORS
 

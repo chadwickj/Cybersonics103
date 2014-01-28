@@ -14,8 +14,7 @@ Controls* Controls::GetInstance() {
 Controls::Controls() {
 	m_leftStick = new Joystick(LEFT_JOYSTICK_PORT);
 	m_rightStick = new Joystick(RIGHT_JOYSTICK_PORT);
-	m_shooterStick = new Joystick(SHOOTER_JOYSTICK_PORT);
-	m_climberStick = new Joystick(CLIMBER_JOYSTICK_PORT);
+	m_operatorStick = new Joystick(OPERATOR_JOYSTICK_PORT);
 }
 
 float Controls::GetLeftY() {
@@ -42,34 +41,10 @@ bool Controls::GetRightButton(int button) {
 	return m_rightStick->GetRawButton(button);
 }
 
-float Controls::GetShooterY() {
-	return m_shooterStick->GetY();
+float Controls::GetPickupButton(int button) {
+    return m_operatorStick->GetRawButton(button);
 }
 
-bool Controls::GetShooterButton(int button) {
-	return m_shooterStick->GetRawButton(button);
-}
-
-bool Controls::GetShooterTrigger() {
-	return m_shooterStick->GetTrigger();
-}
-
-float Controls::GetShooterThrottle(){
-	return m_shooterStick->GetThrottle();
-}
-
-float Controls::GetClimberY(){
-	return m_climberStick->GetY();
-}
-
-bool Controls::GetClimberButton(int button){
-	return m_climberStick->GetRawButton(button);
-}
-
-bool Controls::GetClimberTrigger(){
-	return m_climberStick->GetTrigger();
-}
-
-float Controls::GetClimberThrottle(){
-	return m_climberStick->GetThrottle();
+float Controls::GetPickupY() {
+    return m_operatorStick->GetY();
 }
