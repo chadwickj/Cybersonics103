@@ -17,7 +17,7 @@ public class Main extends SimpleRobot {
         Timer.delay(2.0);
         //or use this
         //Thread.sleep(2000);
-        chassis.drive(0.0,0.0)
+        chassis.drive(0.0,0.0);
     }
     
 }
