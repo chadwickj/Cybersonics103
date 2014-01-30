@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Pickup.h"
 #include "Controls.h"
+//#include "Shooter2.h"
 //#include "math.h"
 
 
@@ -19,7 +20,7 @@ Pickup::Pickup ()
     m_controls = Controls::GetInstance();
 
     pickup = new Talon(PICKUP_MOTOR);
-    pickupArm = new Talon(PICKUP_AMR_MOTOR);
+    pickupArm = new Talon(PICKUP_ARM_MOTOR);
 
     //m_armSolenoid = new Solenoid(PICKUP_ARM_SOLENOID);
 

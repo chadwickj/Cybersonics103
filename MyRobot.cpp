@@ -2,6 +2,7 @@
 #include "DriveBase.h"
 #include "Pickup.h"
 #include "Shooter.h"
+#include "Shooter2.h"
 #include "Controls.h"
 #include "HelperFunctions.h"
 #include "AutonController.h"
@@ -20,6 +21,7 @@ class RobotDemo : public SimpleRobot
 	Controls* controls;
 	Pickup* pickup;
 	Shooter* shooter;
+	WillmanShooter* willmanShooter;
 
 	Relay* compressor;
 	DigitalInput* pressureSwitch;

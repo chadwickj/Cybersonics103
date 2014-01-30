@@ -10,8 +10,15 @@ static const int PRESSURE_SWITCH_CHAN = 14;
 
 static const int LAUNCHER_FIRE_SOLENOID = ;
 static const int LAUNCHER_RESET_SOLENOID = ;
+static const int LAUNCHER_TRIGGER_SOLENOID = ;
 
-//LIGHT
+static const int SHIFT_UP_SOLENOID = ;
+static const int SHIFT_DOWN_SOLENOID = ;
+
+static const int BRAKES_ON_SOLENOID = ;
+static const int BRAKES_OFF_SOLENOID = ;
+
+// LIGHT
 static const int LED_RELAY_CHAN = 2;
 
 // MOTORS
@@ -24,12 +31,24 @@ static const int RIGHT_DRIVE_PWM = 2;
 static const int PICKUP_MOTOR = ;
 static const int PICKUP_ARM_MOTOR = ;
 
+// SHOOTER
+
+static const int SHOOTER_MOTOR = ;
+
+// ANALOG CHANNELS
+
+static const int SHOOTER_MOTOR_POT = ;
 
 // CONTROLS
 
 static const int LEFT_JOYSTICK_PORT = 1;
 static const int RIGHT_JOYSTICK_PORT = 2;
 static const int OPERATOR_JOYSTICK_PORT = ;
+
+static const int SHOOTER_BUTTON = ;
+
+static const int BRAKES_BUTTON = ;
+static const int SHIFTER_BUTTON = ;
 
 // SENSORS
 

@@ -4,19 +4,32 @@
 #include "WPILib.h"
 
 class Shooter {
-    private:
-    Solenoid* fireLauncher;
-    Solenoid* resetLauncher;
+private:
+    Solenoid* m_fireLauncher;
+    Solenoid* m_resetLauncher;
+    Solenoid* m_trigger;
     Controls* m_controls;
 
+    Timer* timer;
 
-    public:
+    enum ResetSequence {
+        false,
+        Firing,
+        Resetting,
+        Locking
+    } shooterReset;
+
+    void Lock();
+    void Set();
+
+public:
     static Shooter* GetInstance();
 
     Shooter();
 
     void Shoot();
     void Reset();
+    void CheckReset();
 
     void EnableTeleopControls();
 

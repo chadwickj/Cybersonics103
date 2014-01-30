@@ -20,6 +20,16 @@ DriveBase::DriveBase() {
 	m_leftDrive = new Talon(LEFT_DRIVE_PWM);
 	m_rightDrive = new Talon(RIGHT_DRIVE_PWM);
 
+	// Shifting
+    m_shiftUp = new Solenoid(SHIFT_UP_SOLENOID);
+    m_shiftDown = new Solenoid(SHIFT_DOWN_SOLENOID);
+    shiftedUp = m_shiftedUp->Get();
+
+    // Brakes
+    m_brakesOn = new Solenoid(BRAKES_ON_SOLENOID);
+    m_brakesOff = new Solenoid(BRAKES_OFF_SOLENOID);
+    brakesOn = m_brakesOn->Get();
+
 	// Encoders
 	m_leftEncoder = new Encoder(LEFT_ENCODER_A, LEFT_ENCODER_B);
 	m_rightEncoder = new Encoder(RIGHT_ENCODER_A, RIGHT_ENCODER_B, true);
@@ -56,10 +66,22 @@ void DriveBase::EnableTeleopControls() {
 	m_leftDrive->Set(-1*m_controls->GetLeftY());
 	m_rightDrive->Set(-1*m_controls->GetRightY());
 
+	if (m_controls->GetBrakesButton && !brakesAreOn) {
+        driveBase->turnBrakesOn();
+	} else if (m_contols->GetBrakesButton && brakesAreOn) {
+        driveBase->turnBrakesOff();
+	}
+
+	if (m_controls->GetShiftButton() && !shiftedUp) {
+        driveBase->shiftUp();
+	} else if (m_controls->GetShiftButton() && shiftedUp) {
+        driveBase->shiftDown();
+	}
+
 	if (GetUltrasonicDistance() > 490 && GetUltrasonicDistance() < 550) {
-		m_led->Set(Relay::kOn);;
+		m_led->Set(Relay::kOn);
 	} else {
-		m_led->Set(Relay::kOff);;
+		m_led->Set(Relay::kOff);
 	}
 }
 
@@ -119,19 +141,37 @@ bool DriveBase::EncoderPidIsEnabled() {
 }
 
 void turnBrakesOn() {
-
+    m_brakesOff->Set(false);
+    m_brakesOn->Set(true);
+    brakesAreOn = true;
 }
 
 void turnBrakesOff() {
-
+    m_brakesOn->Set(false);
+    m_brakesOff->Set(true);
+    brakesAreOn = false;
 }
 
 void shiftUp() {
-
+    m_shiftDown->Set(false);
+    m_shiftUp->Set(true);
+    shiftedUp = true;
 }
 
 void shiftDown() {
+    m_shiftUp->Set(false);
+    m_shiftDown->Set(true);
+    shiftedUp = false;
+}
 
+bool isShiftedUp()
+{
+    return shiftedUp;
+}
+
+bool areBrakesOn()
+{
+    return brakesAreOn;
 }
 
 void DriveBase::ResetGyro() {

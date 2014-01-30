@@ -48,3 +48,11 @@ float Controls::GetPickupButton(int button) {
 float Controls::GetPickupY() {
     return m_operatorStick->GetY();
 }
+
+bool Controls::GetShifterButton(int button) {
+    // Add stick
+}
+
+bool Controls::GetBrakesButton(int button) {
+    // Add stick
+}
