@@ -18,42 +18,40 @@ Shooter::Shooter ()
 
     m_fireLauncher = new Solenoid(LAUNCHER_FIRE_SOLENOID);
     m_resetLauncher = new Solenoid(LAUNCHER_RESET_SOLENOID);
-    m_trigger = new Solenoid(LAUNCHER_TRIGGER_SOLENOID);
+    m_fireTrigger = new Solenoid(LAUNCHER_FIRE_TRIGGER_SOLENOID);
+    m_resetTrigger = new Solenoid(LAUNCHER_RESET_TRIGGER_SOLENOID)
+
 
     timer = new Timer();
 
     shooterReset = false;
-    shooter->CheckReset(); // Make sure shooter is in the correct position (trigger on, firing Solenoids on)
+    CheckReset(); // Make sure shooter is in the correct position (trigger on, firing Solenoids on)
 
 }
 
 Shooter::EnableTelopControls ()
 {
-    if (m_controls->GetShooterButton(SHOOTER_BUTTON))
-    {
-        shooter->Shoot();
-    } else {
-        shooter->Reset();
-    }
-
-    if (shooterReset == Firing) {  // Timer is used to help ensure pneumatics have finished their operation before next solenoids moves
+    if (m_controls->GetShooterButton(SHOOTER_BUTTON) && shooterReset == false) {
+        Shoot();
+    } else if (shooterReset == Firing) {  // Timer is used to help ensure pneumatics have finished their operation before next solenoids moves
         if (timer->HasPeriodPassed(1.0)) {
-            shooter->Reset();
+            Reset();
         }
     } else if (shooterReset == Resetting) {
         if (timer->HasPeriodPassed(5.0)) {
-            shooter->Lock();
+            Lock();
         }
     } else if (shooterReset == Locking) {
         if (timer->HasPeriodPassed(1.0)) {
-            shooter->Set();
+            Set();
         }
     }
 }
 
 Shooter::Shoot() // Pulls back trigger, set 'firing' solenoids launch ball
 {
-    m_trigger->(false);
+    m_fireTrigger->(false);
+    m_resetTrigger->(true);
     shooterReset = Firing;
 
     timer->Reset();
@@ -74,7 +72,8 @@ Shooter::Reset() // Pulls 'firing' solenoids back
 
 Shooter::Lock() // Fires trigger, to lock 'firing' solenoids
 {
-    m_trigger->Set(true);
+    m_fireTrigger->Set(true);
+    m_resetTrigger->Set(false);
     shooterReset = Locking;
 
     timer->Stop();
@@ -94,15 +93,24 @@ Shooter::Set() // Fires 'firing' solenoids to prepare the launcher
 
 Shooter::CheckReset()
 {
-    if (m_fireLauncher->Get()) {
-        shooter->Reset();
-    } else if (m_resetLauncher->Get()) {
-        if (!m_trigger->Get() {
-        shooter->Lock();
+    if (shooterReset != false) {
+        if (m_fireLauncher->Get()) {
+            if (!m_fireTrigger->Get()) {
+                Reset();
+            } else {
+                // Ready to fire
+            }
+        } else if (m_resetLauncher->Get()) {
+            if (!m_fireTrigger->Get()) {
+                Lock();
+            } else {
+                Set();
+            }
+        } else {
+            // Something is wrong.
+            Reset();
         }
-        shooter->Set();
     } else {
-        // LauncherSolenoids were not fired, and LauncherSolenoids are not reset. Something may be wrong.
-        shooter->Reset();
+        // Shooter is already being reset
     }
 }

@@ -5,9 +5,13 @@
 
 class Shooter {
 private:
+    static Shooter* m_instance;
+
     Solenoid* m_fireLauncher;
     Solenoid* m_resetLauncher;
-    Solenoid* m_trigger;
+    Solenoid* m_fireTrigger;
+    Solenoid* m_resetTrigger;
+
     Controls* m_controls;
 
     Timer* timer;

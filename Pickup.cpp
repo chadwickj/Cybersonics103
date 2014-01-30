@@ -2,7 +2,6 @@
 #include "Constants.h"
 #include "Pickup.h"
 #include "Controls.h"
-//#include "Shooter2.h"
 //#include "math.h"
 
 
@@ -19,8 +18,14 @@ Pickup::Pickup ()
 {
     m_controls = Controls::GetInstance();
 
-    pickup = new Talon(PICKUP_MOTOR);
-    pickupArm = new Talon(PICKUP_ARM_MOTOR);
+    m_pickupMotor = new Talon(PICKUP_MOTOR);
+    m_pickupArm = new Talon(PICKUP_ARM_MOTOR);
+    m_pickupArmPot = new AnalogChannel(PICKUP_ARM_POT);
+
+    m_lowerArmLimit = ;
+    m_upperArmLimit = ;
+
+    buttonPressed = false;
 
     //m_armSolenoid = new Solenoid(PICKUP_ARM_SOLENOID);
 
@@ -30,18 +35,26 @@ Pickup::Pickup ()
 Pickup::EnableTeleopControls()
 {
     int pickupSpeed = m_controls->GetPickupY();
+    int armPosition = m_pickupArmPit->GetValue();
 
-    if (pickupSpeed < -.1 && pickupSpeed > .1) {
-        pickup->MoveArm(pickupSpeed);
-    } else {
-        pickup->MoveArm(0);
+    if (pickupSpeed > 0.0 && armPosition < m_upperArmLimit) {
+        MoveArm(pickupSpeed);
+    } else if (pickupSpeed < 0.0 && armPosition > m_lowerArmLimit) {
+        MoveArm(pickupSpeed);
+    else {
+        MoveArm(0);
     }
-    if (m_controls->GetPickupButton(x)) {
-        pickup->TurnOn();
-    } else if (m_controls->GetPickupButton(x)) {
-        pickup->TurnOff();
+
+    if (m_controls->GetPickupButton(PICKUP_BUTTON)) { // buttonPressed just ensures that pickup doesnt infinitly toggle if a button is held down
+        if (pickupMotor->Get() == 0 && !buttonPressed) {
+            buttonPressed = true;
+            TurnOn();
+        } else if (pickupMotor->Get() != 0 && !buttonPressed) {
+            buttonPressed = true;
+            TurnOff();
+        }
     } else {
-        pickup->TurnOff();
+        buttonPressed = false;
     }
 }
 

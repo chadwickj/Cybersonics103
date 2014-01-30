@@ -5,6 +5,8 @@
 
 class WillmanShooter {
 private:
+    static WillmanShooter* m_instance;
+
     Controls* m_controls;
 
     Solenoid* m_fireLauncher;
@@ -14,11 +16,11 @@ private:
 
     AnalogChannel* m_motorPot;
 
+    Timer* timer;
+
     bool m_shooterLoading;
 
     int m_shooterLoadLimit;
-
-    bool m_shooterResetting();
 
 public:
     static WillmanShooter* GetInstance();
@@ -29,6 +31,7 @@ public:
     void Reset();
     void LoadShooter();
     bool IsShooterResetting();
+    bool IsSolenoidFired();
 
     void EnableTeleopControls();
 

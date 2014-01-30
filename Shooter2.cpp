@@ -25,20 +25,26 @@ void WillmanShooter::WillmanShooter ()
 
     m_shooterLoadLimit = ;
 
+    m_shooterLoading = false;
+
+    timer = new Timer();
+
 }
 
 void WillmanShooter::EnableTelopControls ()
 {
-    if (m_controls->GetWillmanShooterButton(SHOOTER_BUTTON))
-    {
-        WillmanShooter->Shoot();
-    } else {
-        WillmanShooter->Reset();
-        WillmanShooter->LoadShooter(); // May need to be used in pickup
+    if (m_controls->GetShooterButton(SHOOTER_BUTTON) && !IsSolenoidFired()) {
+        Shoot();
+    } else if (m_controls->GetShooterButton(SHOOTER_RESET_BUTTON) && !shooterLoading && !IsSolenoidFired()) {
+        LoadShooter();
+    } else if (shooterLoading) {
+        LoadShooter(); // May want to replace this with throttle to use multiple distances
     }
 
-    if (shooterLoading) {
-        WillmanShooter->LoadShooter();
+    if (IsSolenoidFired() && timer->HasPeriodPassed(1.0)) { // Automatically reengage SuperShifter. May need a timer so it isn't reset mid-shot.
+        Reset();
+        timer->Stop();
+        timer->Reset();
     }
 }
 
@@ -46,6 +52,8 @@ void WillmanShooter::Shoot()
 {
     m_resetLauncher->Set(false);
     m_fireLauncher->Set(true);
+    timer->Reset();
+    timer->Start();
 }
 
 void WillmanShooter::Reset()
@@ -58,7 +66,7 @@ void WillmanShooter::LoadShooter()
 {
     int motorValue = m_motorPot->GetValue();
     if (motorValue < m_shooterLoadLimit) {
-        m_shooterMotor->Set(1.0);
+        m_shooterMotor->Set(0.5);
         shooterLoading = true;
     } else {
         m_shooterMotor->Set(0.0);
@@ -69,4 +77,9 @@ void WillmanShooter::LoadShooter()
 bool WillmanShooter::IsShooterResetting()
 {
     return shooterLoading;
+}
+
+bool WillmanShooter::IsSolenoidFired()
+{
+    return m_fireLauncher->Get();
 }
