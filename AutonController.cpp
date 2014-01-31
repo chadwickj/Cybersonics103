@@ -85,3 +85,23 @@ void AutonController::DoNothing() {
 	drivebase->SetSpeed(0.0);
 	// TODO: Make other components do nothing.
 }
+
+void AutonController::CliffDey() {
+
+}
+
+void AutonController::JimTheWelder() {
+
+}
+
+void AutonController::JackTusman() {
+
+}
+
+void AutonController::MikeLube() {
+
+}
+
+void AutonController::WayneCokeley() {
+
+}

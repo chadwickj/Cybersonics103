@@ -66,15 +66,15 @@ void DriveBase::EnableTeleopControls() {
 	m_leftDrive->Set(-1*m_controls->GetLeftY());
 	m_rightDrive->Set(-1*m_controls->GetRightY());
 
-	if (m_controls->GetBrakesButton && !brakesAreOn) {
+	if (m_controls->GetBrakesButton(BRAKES_BUTTON) && !brakesAreOn) {
         driveBase->turnBrakesOn();
-	} else if (m_contols->GetBrakesButton && brakesAreOn) {
+	} else if (m_contols->GetBrakesButton(BRAKES_BUTTON) && brakesAreOn) {
         driveBase->turnBrakesOff();
 	}
 
-	if (m_controls->GetShiftButton() && !shiftedUp) {
+	if (m_controls->GetShiftButton(SHIFTER_BUTTON) && !shiftedUp) {
         driveBase->shiftUp();
-	} else if (m_controls->GetShiftButton() && shiftedUp) {
+	} else if (m_controls->GetShiftButton(SHIFTER_BUTTON) && shiftedUp) {
         driveBase->shiftDown();
 	}
 
