@@ -33,18 +33,12 @@ Shooter::EnableTelopControls ()
 {
     if (m_controls->GetShooterButton(SHOOTER_BUTTON) && shooterReset == false) {
         Shoot();
-    } else if (shooterReset == Firing) {  // Timer is used to help ensure pneumatics have finished their operation before next solenoids moves
-        if (timer->HasPeriodPassed(1.0)) {
-            Reset();
-        }
-    } else if (shooterReset == Resetting) {
-        if (timer->HasPeriodPassed(5.0)) {
-            Lock();
-        }
-    } else if (shooterReset == Locking) {
-        if (timer->HasPeriodPassed(1.0)) {
-            Set();
-        }
+    } else if (shooterReset == Firing && m_fireLauncher->Get()) { // May need to check if Get value is taken from  the last command recieved or current state
+        Reset();
+    } else if (shooterReset == Resetting && m_resetLauncher->Get()) {
+        Lock();
+    } else if (shooterReset == Locking && m_fireTrigger->Get()) {
+        Set();
     }
 }
 

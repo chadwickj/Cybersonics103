@@ -33,15 +33,13 @@ void WillmanShooter::WillmanShooter ()
 
 void WillmanShooter::EnableTelopControls ()
 {
-    if (m_controls->GetShooterButton(SHOOTER_BUTTON) && !IsSolenoidFired()) {
+    if (m_controls->GetShooterButton(SHOOTER_BUTTON) && IsSolenoidReset()) { // Cannot fire until solenoid is reset
         Shoot();
-    } else if (m_controls->GetShooterButton(SHOOTER_RESET_BUTTON) && !shooterLoading && !IsSolenoidFired()) {
+    } else if (( m_controls->GetShooterButton(SHOOTER_RESET_BUTTON) || m_shooterLoading ) && IsSolenoidReset() ) {
         LoadShooter();
-    } else if (shooterLoading) {
-        LoadShooter(); // May want to replace this with throttle to use multiple distances
     }
 
-    if (IsSolenoidFired() && timer->HasPeriodPassed(1.0)) { // Automatically reengage SuperShifter. May need a timer so it isn't reset mid-shot.
+    if (!IsSolenoidReset() && timer->HasPeriodPassed(0.5)) { // Automatically reengage SuperShifter. Timer is just there so it isn't reset mid-shot.
         Reset();
         timer->Stop();
         timer->Reset();
@@ -50,16 +48,18 @@ void WillmanShooter::EnableTelopControls ()
 
 void WillmanShooter::Shoot()
 {
-    m_resetLauncher->Set(false);
-    m_fireLauncher->Set(true);
+    m_resetLauncher->Set(true);
+    m_fireLauncher->Set(false);
+    //Reset motor pot?
+
     timer->Reset();
     timer->Start();
 }
 
 void WillmanShooter::Reset()
 {
-    m_fireLauncher->Set(false);
-    m_resetLauncher->Set(true);
+    m_resetLauncher->Set(false);
+    m_fireLauncher->Set(true);
 }
 
 void WillmanShooter::LoadShooter()
@@ -67,10 +67,10 @@ void WillmanShooter::LoadShooter()
     int motorValue = m_motorPot->GetValue();
     if (motorValue < m_shooterLoadLimit) {
         m_shooterMotor->Set(0.5);
-        shooterLoading = true;
+        m_shooterLoading = true;
     } else {
         m_shooterMotor->Set(0.0);
-        shooterLoading = false;
+        m_shooterLoading = false;
     }
 }
 
@@ -79,7 +79,7 @@ bool WillmanShooter::IsShooterResetting()
     return shooterLoading;
 }
 
-bool WillmanShooter::IsSolenoidFired()
+bool WillmanShooter::IsSolenoidReset()
 {
     return m_fireLauncher->Get();
 }
