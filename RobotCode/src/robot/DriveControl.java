@@ -14,15 +14,11 @@ import edu.wpi.first.wpilibj.*;
  */
 public class DriveControl {
     public Main m = new Main();
-    public Joystick leftDriveStick = new Joystick(1);
-    public Joystick rightDriveStick = new Joystick(2);
-    public Joystick leftControlStick = new Joystick(3);
-    public Joystick rightControlStick = new Joystick(4);
         public void operatorControl() {
         m.chassis.setSafetyEnabled(true);
         while (m.isOperatorControl() && m.isEnabled()) {
             //Drive Controls
-            m.chassis.tankDrive(leftDriveStick, rightDriveStick);
+            m.chassis.tankDrive(m.leftDriveStick, m.rightDriveStick);
             Timer.delay(0.01);
             //Shooter Controls
             
