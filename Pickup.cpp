@@ -1,9 +1,6 @@
 #include "WPILib.h"
-#include "Constants.h"
 #include "Pickup.h"
-#include "Controls.h"
-//#include "math.h"
-
+#include "Constants.h"
 
 Pickup* Pickup::m_instance = NULL;
 
@@ -14,82 +11,28 @@ Pickup* Pickup::GetInstance() {
   return m_instance;
 }
 
-Pickup::Pickup ()
-{
-    m_controls = Controls::GetInstance();
-
-    m_pickupMotor = new Talon(PICKUP_MOTOR);
-    m_pickupArm = new Talon(PICKUP_ARM_MOTOR);
-    m_pickupArmPot = new AnalogChannel(PICKUP_ARM_POT);
-
-    m_lowerArmLimit = ;
-    m_upperArmLimit = ;
-
-    buttonPressed = false;
-
-    //m_armSolenoid = new Solenoid(PICKUP_ARM_SOLENOID);
-
-    //int pickupArmUpperLimit = ;
-    //int pickupArmLowerLimit = ;
-}
-Pickup::EnableTeleopControls()
-{
-    int pickupSpeed = m_controls->GetPickupY();
-    int armPosition = m_pickupArmPit->GetValue();
-
-    if (pickupSpeed > 0.0 && armPosition < m_upperArmLimit) {
-        MoveArm(pickupSpeed);
-    } else if (pickupSpeed < 0.0 && armPosition > m_lowerArmLimit) {
-        MoveArm(pickupSpeed);
-    else {
-        MoveArm(0);
-    }
-
-    if (m_controls->GetPickupButton(PICKUP_BUTTON)) { // buttonPressed just ensures that pickup doesnt infinitly toggle if a button is held down
-        if (pickupMotor->Get() == 0 && !buttonPressed) {
-            buttonPressed = true;
-            TurnOn();
-        } else if (pickupMotor->Get() != 0 && !buttonPressed) {
-            buttonPressed = true;
-            TurnOff();
-        }
-    } else {
-        buttonPressed = false;
-    }
+Pickup::Pickup() {
+	m_pickup = new Talon(PICKUP_PWM);
+	m_controls = Controls::GetInstance();
+	shooter = Shooter::GetInstance();
 }
 
-void Pickup::TurnOn()
-{
-    pickupMotor->Set(1.0);
+void Pickup::EnableTeleopControls() {
+	if (m_controls->GetShooterButton(6)) { // Spit out
+		m_pickup->Set(0.50);
+	} else if (m_controls->GetShooterButton(7)) {	// Pick up
+		if (!(shooter->IsBucketUp()) && !(shooter->IsTiltUp())) {
+			m_pickup->Set(-0.50);
+		}
+	} else {
+		m_pickup->Set(0.0);
+	}
 }
 
-void Pickup::TurnOff()
-{
-    pickupMotor->Set(0.0);
+void Pickup::TurnOn(float speed) {
+	m_pickup->Set(-1.0 * speed);
 }
 
-void Pickup::MoveArm(float speed)
-{
-    pickupArm->Set(1 * speed);
+void Pickup::TurnOff() {
+	m_pickup->Set(0.0);
 }
-/*
-Pickup::EnableEncoderPid()
-{
-
-}
-
-Pickup::DisableEncoderPid()
-{
-
-}
-
-Pickup::EncoderPidIsEnabled()
-{
-
-}
-
-Pickup::GetEncoderCount()
-{
-
-}
-*/
