@@ -2,7 +2,7 @@
 #include "DriveBase.h"
 #include "Pickup.h"
 #include "Shooter.h"
-#include "Climber.h"
+//#include "Climber.h"
 #include "Controls.h"
 #include "HelperFunctions.h"
 #include "AutonController.h"
@@ -21,7 +21,6 @@ class RobotDemo : public SimpleRobot
 	Pickup* pickup;
 	Shooter* shooter;
 	Controls* controls;
-	Climber* climber;
 	
 	Relay* compressor;
 	DigitalInput* pressureSwitch;
@@ -39,9 +38,8 @@ public:
 		autonController = AutonController::GetInstance();
 		
 		drivebase = DriveBase::GetInstance();
-		shooter = Shooter::GetInstance();
+		//shooter = Shooter::GetInstance();
 		pickup = Pickup::GetInstance();
-		climber = Climber::GetInstance();
 		controls = Controls::GetInstance();
 		
 		compressor = new Relay(COMPRESSOR_RELAY_CHAN, Relay::kForwardOnly);
@@ -54,11 +52,7 @@ public:
 		
 		autonSelector = new SendableChooser();
 		autonSelector->AddObject("1. Test - Test Auton", (void*)1);
-		autonSelector->AddObject("2. Wayne Cokeley - Bottom Left, Front Pickup", (void*)2);
-		autonSelector->AddObject("3. Mike L. NOT FINISHED 7 SHOT", (void*)3);
-		autonSelector->AddObject("4. Jack Tusman NOT FINISHED", (void*)4);
-		autonSelector->AddObject("5. Jim the Welder - Bottom Right, Pyramid Pickup", (void*)5);
-		autonSelector->AddObject("6. Cliff Dey - Shoot from back of pyramid ONLY", (void*)6);
+
 		//autonSelector->AddObject("7. ", (void*)7);
 		autonSelector->AddDefault("0. DEFAULT - Do Nothing", (void*)0);
 		
@@ -78,16 +72,10 @@ public:
 		
 		while (IsAutonomous() && IsEnabled()) 
 		{	
-			climber->TiltToDrivingPosition();
 			
 			switch (selectedAutoMode) {
 				case 0: autonController->DoNothing(); break;
 				case 1: autonController->Test(); break;
-				case 2: autonController->WayneCokeley(); break;
-				case 3: autonController->MikeLube(); break;
-				case 4: autonController->JackTusman(); break;
-				case 5: autonController->JimTheWelder(); break;
-				case 6: autonController->CliffDey(); break;
 		}
 			
 			// Print Encoder Values to Driver station LCD
@@ -120,8 +108,7 @@ public:
 			autonController->Reset();
 			drivebase->EnableTeleopControls();
 			pickup->EnableTeleopControls();
-			shooter->EnableTeleopControls();
-			climber->EnableTeleopControls();
+			//shooter->EnableTeleopControls();
 			
 			// Pneumatics
 			if(pressureSwitch->Get() == 1){
@@ -139,8 +126,7 @@ public:
 				drivebase->ResetGyro();
 			}
 			
-			dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Tilt Pot %d ", climber->GetTiltPot());
-			dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Mast Pot %d ", climber->GetMastPot());
+			
 			//dsLCD->Printf(DriverStationLCD::kUser_Line1, 1, "Left Enc %d      ", leftEncoderCount);
 			//dsLCD->Printf(DriverStationLCD::kUser_Line2, 1, "Right Enc %d     ", rightEncoderCount);
 			dsLCD->Printf(DriverStationLCD::kUser_Line3, 1, "Left In. %f      ", encoderCountToInches(leftEncoderCount));
@@ -169,12 +155,9 @@ public:
 		//float d = 0.002116;
 		
 		float encoderSetpoint = 200.0;
-		float turnSetpoint = 90.0;
 		float distanceIncrement = 0.01;
 		float increment = 0.000001;
 		
-		bool timerStopped = false;
-		bool timerRunning = false;
 		
 		while (IsTest() && IsEnabled()) {
 			

@@ -10,8 +10,10 @@ private:
 	Joystick* m_leftStick;
 	Joystick* m_rightStick;
 
-	Joystick* m_shooterStick;
-	Joystick* m_climberStick;
+	//Joystick* m_shooterStick;
+	//Joystick* m_climberStick;
+	
+	Joystick* m_operatorStick;
 	
 public:
 	static Controls* GetInstance();
@@ -27,11 +29,5 @@ public:
 	float GetShooterY();
 	bool GetShooterButton(int button);
 	bool GetShooterTrigger();
-	float GetShooterThrottle();
-	
-	float GetClimberY();
-	bool GetClimberButton(int button);
-	bool GetClimberTrigger();
-	float GetClimberThrottle();
 };
 #endif

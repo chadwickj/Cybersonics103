@@ -14,16 +14,16 @@ Pickup* Pickup::GetInstance() {
 Pickup::Pickup() {
 	m_pickup = new Talon(PICKUP_PWM);
 	m_controls = Controls::GetInstance();
-	shooter = Shooter::GetInstance();
+	//shooter = Shooter::GetInstance();
 }
 
 void Pickup::EnableTeleopControls() {
 	if (m_controls->GetShooterButton(6)) { // Spit out
 		m_pickup->Set(0.50);
 	} else if (m_controls->GetShooterButton(7)) {	// Pick up
-		if (!(shooter->IsBucketUp()) && !(shooter->IsTiltUp())) {
+		/*if (!(shooter->IsBucketUp()) && !(shooter->IsTiltUp())) {
 			m_pickup->Set(-0.50);
-		}
+		}*/
 	} else {
 		m_pickup->Set(0.0);
 	}
