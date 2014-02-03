@@ -14,6 +14,14 @@ private:
 	Talon* m_leftDrive;
 	Talon* m_rightDrive;
 	
+	Solenoid* m_brakesOn;
+	Solenoid* m_brakesOff;
+	Solenoid* m_shiftUp;
+	Solenoid* m_shiftDown;
+	
+	bool brakesAreOn;
+	bool shiftedUp;
+
 	Encoder* m_leftEncoder;
 	Encoder* m_rightEncoder;
 	
@@ -53,6 +61,14 @@ public:
 	void EnableEncoderPid();
 	void DisableEncoderPid();
 	bool EncoderPidIsEnabled();
+	
+	void turnBrakesOn();
+	void turnBrakesOff();
+	void shiftUp();
+	void shiftDown();
+
+	bool areBrakesOn();
+	bool isShiftedUp();
 	
 	void ResetGyro();
 	float GetGyroAngle();

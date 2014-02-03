@@ -19,6 +19,16 @@ DriveBase::DriveBase() {
 	// Remember to change these to Talons
 	m_leftDrive = new Talon(LEFT_DRIVE_PWM);
 	m_rightDrive = new Talon(RIGHT_DRIVE_PWM);
+	
+	// Shifting
+    m_shiftUp = new Solenoid(SHIFT_UP_SOLENOID);
+    m_shiftDown = new Solenoid(SHIFT_DOWN_SOLENOID);
+    shiftedUp = m_shiftUp->Get();
+
+    // Brakes
+    m_brakesOn = new Solenoid(BRAKES_ON_SOLENOID);
+    m_brakesOff = new Solenoid(BRAKES_OFF_SOLENOID);
+    brakesAreOn = m_brakesOn->Get();
 
 	// Encoders
 	m_leftEncoder = new Encoder(LEFT_ENCODER_A, LEFT_ENCODER_B);
@@ -54,6 +64,18 @@ DriveBase::DriveBase() {
 void DriveBase::EnableTeleopControls() {
 	m_leftDrive->Set(m_controls->GetLeftY());
 	m_rightDrive->Set(m_controls->GetRightY());
+	
+	if (m_controls->GetBrakesButton(BRAKES_BUTTON) && !brakesAreOn) {
+		turnBrakesOn();
+	} else if (m_controls->GetBrakesButton(BRAKES_BUTTON) && brakesAreOn) {
+		turnBrakesOff();
+	}
+
+	if (m_controls->GetShifterButton(SHIFTER_BUTTON) && !shiftedUp) {
+        shiftUp();
+	} else if (m_controls->GetShifterButton(SHIFTER_BUTTON) && shiftedUp) {
+        shiftDown();
+	}
 	
 }
 
@@ -110,6 +132,40 @@ void DriveBase::DisableEncoderPid() {
 
 bool DriveBase::EncoderPidIsEnabled() {
 	return m_leftEncoderController->IsEnabled() && m_rightEncoderController->IsEnabled();
+}
+
+void DriveBase::turnBrakesOn() {
+	m_brakesOff->Set(false);
+	m_brakesOn->Set(true);
+    brakesAreOn = true;
+}
+
+void DriveBase::turnBrakesOff() {
+    m_brakesOn->Set(false);
+    m_brakesOff->Set(true);
+    brakesAreOn = false;
+}
+
+void DriveBase::shiftUp() {
+    m_shiftDown->Set(false);
+    m_shiftUp->Set(true);
+    shiftedUp = true;
+}
+
+void DriveBase::shiftDown() {
+    m_shiftUp->Set(false);
+    m_shiftDown->Set(true);
+    shiftedUp = false;
+}
+
+bool DriveBase::isShiftedUp()
+{
+    return shiftedUp;
+}
+
+bool DriveBase::areBrakesOn()
+{
+    return brakesAreOn;
 }
 
 void DriveBase::ResetGyro() {
