@@ -38,7 +38,7 @@ public:
 		autonController = AutonController::GetInstance();
 		
 		drivebase = DriveBase::GetInstance();
-		//shooter = Shooter::GetInstance();
+		shooter = Shooter::GetInstance();
 		pickup = Pickup::GetInstance();
 		controls = Controls::GetInstance();
 		
@@ -108,7 +108,7 @@ public:
 			autonController->Reset();
 			drivebase->EnableTeleopControls();
 			pickup->EnableTeleopControls();
-			//shooter->EnableTeleopControls();
+			shooter->EnableTeleopControls();
 			
 			// Pneumatics
 			if(pressureSwitch->Get() == 1){

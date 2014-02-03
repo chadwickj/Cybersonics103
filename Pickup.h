@@ -18,8 +18,6 @@ public:
 	Pickup();
 	
 	void EnableTeleopControls();
-	void TurnOn(float speed = 0.5);
-	void TurnOff();
 };
 
 #endif

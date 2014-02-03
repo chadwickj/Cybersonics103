@@ -18,21 +18,5 @@ Pickup::Pickup() {
 }
 
 void Pickup::EnableTeleopControls() {
-	if (m_controls->GetShooterButton(6)) { // Spit out
-		m_pickup->Set(0.50);
-	} else if (m_controls->GetShooterButton(7)) {	// Pick up
-		/*if (!(shooter->IsBucketUp()) && !(shooter->IsTiltUp())) {
-			m_pickup->Set(-0.50);
-		}*/
-	} else {
-		m_pickup->Set(0.0);
-	}
-}
-
-void Pickup::TurnOn(float speed) {
-	m_pickup->Set(-1.0 * speed);
-}
-
-void Pickup::TurnOff() {
-	m_pickup->Set(0.0);
+	
 }
