@@ -53,3 +53,18 @@ bool Controls::GetShooterTrigger() {
 	return m_operatorStick->GetTrigger();
 }
 
+bool Controls::GetPickupButton(int button) {
+    return m_operatorStick->GetRawButton(button);
+}
+
+float Controls::GetPickupY() {
+    return m_operatorStick->GetY();
+}
+
+bool Controls::GetShifterButton(int button) {
+	return true;
+}
+
+bool Controls::GetBrakesButton(int button) {
+    return true;
+}

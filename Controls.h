@@ -29,5 +29,11 @@ public:
 	float GetShooterY();
 	bool GetShooterButton(int button);
 	bool GetShooterTrigger();
+	
+	float GetPickupY();
+	bool GetPickupButton(int button);
+	
+	bool GetBrakesButton(int button);
+	bool GetShifterButton(int button);
 };
 #endif

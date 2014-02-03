@@ -40,7 +40,7 @@ static const int SHOOTER_MOTOR = 1024;
 // ANALOG CHANNELS
 
 static const int SHOOTER_MOTOR_POT = 1024;
-static const int PICKUP_ARM_PO = 1024;
+static const int PICKUP_ARM_POT = 1024;
 
 // CONTROLS
 
