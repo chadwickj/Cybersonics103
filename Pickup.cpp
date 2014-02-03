@@ -12,9 +12,7 @@ Pickup* Pickup::GetInstance() {
 }
 
 Pickup::Pickup() {
-	m_pickup = new Talon(PICKUP_PWM);
-	m_controls = Controls::GetInstance();
-	//shooter = Shooter::GetInstance();
+	
 }
 
 void Pickup::EnableTeleopControls() {

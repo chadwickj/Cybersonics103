@@ -2,6 +2,7 @@
 #include "DriveBase.h"
 #include "Pickup.h"
 #include "Shooter.h"
+#include "Shooter_2.h"
 //#include "Climber.h"
 #include "Controls.h"
 #include "HelperFunctions.h"
@@ -20,6 +21,7 @@ class RobotDemo : public SimpleRobot
 	DriveBase* drivebase;
 	Pickup* pickup;
 	Shooter* shooter;
+	WillmanShooter* willmanShooter;
 	Controls* controls;
 	
 	Relay* compressor;
@@ -39,6 +41,7 @@ public:
 		
 		drivebase = DriveBase::GetInstance();
 		shooter = Shooter::GetInstance();
+		willmanShooter = WillmanShooter::GetInstance();
 		pickup = Pickup::GetInstance();
 		controls = Controls::GetInstance();
 		
@@ -109,6 +112,7 @@ public:
 			drivebase->EnableTeleopControls();
 			pickup->EnableTeleopControls();
 			shooter->EnableTeleopControls();
+			willmanShooter->EnableTeleopControls();
 			
 			// Pneumatics
 			if(pressureSwitch->Get() == 1){

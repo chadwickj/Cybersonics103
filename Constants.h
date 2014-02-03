@@ -27,8 +27,6 @@ static const int LED_RELAY_CHAN = 2;
 static const int LEFT_DRIVE_PWM = 1;
 static const int RIGHT_DRIVE_PWM = 2;
 
-//REMOVE
-static const int PICKUP_PWM = 4;
 
 // PICKUP
 
@@ -51,6 +49,7 @@ static const int RIGHT_JOYSTICK_PORT = 2;
 static const int OPERATOR_JOYSTICK_PORT = 1024;
 
 static const int SHOOTER_BUTTON = 1024;
+static const int SHOOTER_RESET_BUTTON = 1024;
 
 static const int PICKUP_BUTTON = 1024;
 
