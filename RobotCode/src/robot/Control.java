@@ -14,27 +14,24 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Control {
     public Main m = new Main();
-    
-        public void driveControl() {
+    public void driveControl() {
         m.chassis.setSafetyEnabled(true);
         while (m.isOperatorControl() && m.isEnabled()) {
             //Drive Controls
             m.chassis.tankDrive(m.leftDriveStick, m.rightDriveStick);
             Timer.delay(0.01);
         }
-        
     }
-        public void shooterControl(int button) {
-            //Initializes shooter input
-           // int button = 0;
-            boolean btL = m.leftControlStick.getRawButton(button);
-            boolean btR = m.leftControlStick.getRawButton(button);
-            //Outputs action based on shooter input (Left Sticks)
-            if(btL){
-                
-            }
-            if(btR){
-                
-            }
+    public void shooterControl(int button) {
+        //Initializes shooter input
+        boolean btL = m.leftControlStick.getRawButton(button);
+        boolean btR = m.rightControlStick.getRawButton(button);
+        //Outputs action based on shooter input (Left Sticks)
+        if(btL){
+            
         }
+        if(btR){
+            
+        }
+    }
 }

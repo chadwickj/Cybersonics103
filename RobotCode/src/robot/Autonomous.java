@@ -13,10 +13,14 @@ import edu.wpi.first.wpilibj.*;
  */
 public class Autonomous {
     public Main m = new Main();
-    public void autonomous() {
+    public Autonomous() {
         m.chassis.setSafetyEnabled(false);
         m.chassis.drive(-0.5, 0.0);
         Timer.delay(2.0);
         m.chassis.drive(0.0, 0.0);
+        Timer.delay(2.0);
+        m.chassis.drive(1,0.1);
+        Timer.delay(1.0);
+        m.chassis.drive(0, 0);
     }
 }
